@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registration Form</title>
+</head>
+<style>
+        body {
+        
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+             background-image: url("https://grampanchayatkadepur.com/wp-content/uploads/2024/12/IMG-20241223-WA0083.jpg");  
+            background-size: cover; 
+            background-repeat: no-repeat;
+            height: auto; 
+        }
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        h2 { 
+            color: #2c3e50;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #34495e;
+            text-align: left;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .required {
+            color: red;
+            margin-left: 3px;
+        }
+        button {
+            background-color: #2980b9;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #2471a3;
+        }
+        .photo-upload {
+            border: 2px dashed #ddd;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+<body>
+   <div class="form-container">
+        <h2>Family Head Information</h2>
+    <form th:action="@{/register}" th:object="${user}" method="post">
+     <div th:if="${errorMessage}" style="color: red;">
+            <p th:text="${errorMessage}"></p>
+        </div>
+        <script>
+       // Check if there is an error message
+       var errorMessage = /*[[${errorMessage}]]*/ '';
+       if (errorMessage) {
+        alert(errorMessage); // Show alert popup
+         }
+       </script>
+       <div class="form-group">
+                <label>Home Number<span class="required">*</span></label>
+                <input type="text" id="homeNumber" name="homeNumber" th:field="*{homeNumber}" required>
+            </div>
+            <div class="form-group">
+                <label>Mobile Number<span class="required">*</span></label>
+                <input type="tel" name="mobileNumber" th:field="*{mobileNumber}" required pattern="[0-9]{10}">
+            </div>
+            <div class="form-group">
+                <label>Full Name<span class="required">*</span></label>
+                <input type="text" name="fullName" th:field="*{fullName}" required>
+            </div>
+            <div class="form-group">
+                <label>Aadhar Number<span class="required">*</span></label>
+                <input type="text" name="aadharNumber" th:field="*{aadharNumber}" required pattern="[0-9]{12}">
+            </div>
+            <div class="form-group">
+                <label>PAN Number<span class="required">*</span></label>
+                <input type="text" name="panNumber" th:field="*{panNumber}" required pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}">
+            </div>
+            <div class="form-group">
+                <label>Photo Upload<span class="required">*</span></label>
+                <div class="photo-upload">
+                    <input type="file" name="photoUpload" accept="image/*" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Number of Water Connections<span class="required">*</span></label>
+                <input type="number" name="waterConnections" th:field="*{waterConnections}" min="0" required>
+            </div>
+			<div class="form-group">
+			                <label>Pending Gharpatti<span class="required">*</span></label>
+			                <input type="number" name="pendinggharpatti" th:field="*{pendinggharpatti}" min="0" required>
+			            </div>
+			            <div class="form-group">
+			                <label>Pending Panipatti <span class="required">*</span></label>
+			                <input type="number" name="pendingpanipatti" th:field="*{pendingpanipatti}" min="0" required>
+			            </div>
+            <div class="form-group">
+                <div id="properties"></div>
+                <button type="button" onclick="addProperty()">Add Property</button>
+                <h3>Property Areas:</h3>
+                <div id="mergedAreas"></div>
+            </div>
+            <input type="hidden" id="rccArea" name="rccArea" th:field="*{rccArea}" value="0">
+            <input type="hidden" id="puccaArea" name="puccaArea" th:field="*{puccaArea}" value="0">
+            <input type="hidden" id="kutchaArea" name="kutchaArea" th:field="*{kutchaArea}" value="0">
+            
+            
+            <button type="submit" onclick="nextpage()">Submit Family Head Info</button>
+            
+        </form>
+        </div>
+        
+   
+
+</body>
+<script>
+          
+
+        function addProperty() {
+            const propertyDiv = document.createElement("div");
+            propertyDiv.classList.add("property");
+            propertyDiv.innerHTML = `
+                <label style="margin-bottom:10px">Property Area (sq ft):</label>
+                <input style="margin-top:10px" type="number" class="area" placeholder="Enter area" required>
+                <label style="margin-bottom:10px">Property Type:</label>
+                <select class="propertyType">
+                    <option value="rcc">RCC</option>
+                    <option value="pucca">Pucca</option>
+                    <option value="kutcha">Kutcha</option>
+                </select>
+            `;
+            document.getElementById("properties").appendChild(propertyDiv);
+        }
+
+        function updateMergedAreas() {
+            const properties = document.querySelectorAll(".property");
+            let propertyMap = {};
+            let mergedAreasDisplay = "";
+            
+            properties.forEach(property => {
+                const area = parseFloat(property.querySelector(".area").value);
+                const propertyType = property.querySelector(".propertyType").value;
+
+                if (!area || area <= 0) {
+                    alert("Please enter a valid area.");
+                    return;
+                }
+                
+                if (!propertyMap[propertyType]) {
+                    propertyMap[propertyType] = 0;
+                }
+                propertyMap[propertyType] += area;
+            });
+            
+            document.getElementById("rccArea").value = propertyMap['rcc'] || 0;
+            document.getElementById("puccaArea").value = propertyMap['pucca'] || 0;
+            document.getElementById("kutchaArea").value = propertyMap['kutcha'] || 0;
+
+            Object.keys(propertyMap).forEach(type => {
+                mergedAreasDisplay += `<strong>${type.toUpperCase()} = ${propertyMap[type]}</strong><br>`;
+            });
+            
+            document.getElementById("mergedAreas").innerHTML = mergedAreasDisplay;
+        }
+
+        document.getElementById("properties").addEventListener("input", updateMergedAreas);
+        
+        function nextpage() {
+            window.location.assign("/register1");  // Correct approach
+        }
+
+    </script>
+</html>

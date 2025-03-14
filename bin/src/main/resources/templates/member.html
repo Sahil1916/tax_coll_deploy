@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registration Form</title>
+</head>
+<style>
+        body {
+        
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+             background-image: url("https://grampanchayatkadepur.com/wp-content/uploads/2024/12/IMG-20241223-WA0083.jpg");  
+            background-size: cover; 
+            background-repeat: no-repeat;
+            height: auto; 
+        }
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        h2 { 
+            color: #2c3e50;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #34495e;
+            text-align: left;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .required {
+            color: red;
+            margin-left: 3px;
+        }
+        button {
+            background-color: #2980b9;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #2471a3;
+        }
+        .photo-upload {
+            border: 2px dashed #ddd;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+<body>
+  <div class="form-container">
+        <h2>Family member Information</h2>
+    <form th:action="@{/register/member}" th:object="${member}" method="post">
+        <div class="form-group">
+            <label>Home Number<span class="required">*</span></label>
+            <input type="text" name="homeNumber" id="familyHomeNumber" th:value="${homeNumber}" readonly required>
+        </div>
+        <div class="form-group">
+            <label>Member Name<span class="required">*</span></label>
+            <input type="text" name="memberName" id="memberName" required>
+        </div>
+        <div class="form-group">
+            <label>Member Mobile Number</label>
+            <input type="tel" name="memberMobile" id="memberMobile" pattern="[0-9]{10}" required>
+        </div>
+        <div class="form-group">
+            <label>Member Aadhar Number</label>
+            <input type="text" name="memberAadhar" id="memberAadhar" pattern="[0-9]{12}" required>
+        </div>
+        <div class="form-group">
+                <label>PAN Number<span class="required">*</span></label>
+                <input type="text" name="panNumber" th:field="*{panNumber}" required pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}">
+            </div>
+        <button type="submit">Add Member</button>
+<a th:href="@{/register/exit}">
+    <button type="button">EXIT</button>
+</a>
+
+</form>   
+</div>
+
+</body>
+</html>
